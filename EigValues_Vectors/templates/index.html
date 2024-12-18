@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eigenvalues and Eigenvectors</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        input, select {
+            padding: 5px;
+            margin: 5px;
+            text-align: center;
+            width: 60px;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        table {
+            margin: auto;
+            border-collapse: collapse;
+        }
+        td {
+            padding: 5px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Eigenvalues and Eigenvectors Calculator</h2>
+        <form method="POST" action="/">
+            <label for="size">Matrix Size:</label>
+            <select name="size" id="size" onchange="generateMatrix()" required>
+                <option value="">Select</option>
+                <option value="2">2x2</option>
+                <option value="3">3x3</option>
+            </select>
+            <div id="matrixContainer" style="margin-top: 10px;"></div>
+            <button type="submit">Calculate</button>
+        </form>
+        {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
+        {% if eigenvalues %}
+        <div class="result">
+            <h4>Results:</h4>
+            <p><strong>Matrix:</strong></p>
+            <table>
+                {% for row in matrix %}
+                <tr>
+                    {% for element in row %}
+                    <td>{{ element }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+            <p><strong>Eigenvalues:</strong> {{ eigenvalues }}</p>
+            <p><strong>Eigenvectors:</strong></p>
+            <pre>{{ eigenvectors }}</pre>
+        </div>
+        {% endif %}
+    </div>
+    <script>
+        function generateMatrix() {
+            const size = document.getElementById('size').value;
+            const container = document.getElementById('matrixContainer');
+            container.innerHTML = ''; // Clear previous matrix
+            if (size) {
+                const table = document.createElement('table');
+                for (let i = 1; i <= size; i++) {
+                    const row = document.createElement('tr');
+                    for (let j = 1; j <= size; j++) {
+                        const cell = document.createElement('td');
+                        const input = document.createElement('input');
+                        input.type = 'number';
+                        input.name = `a${i}${j}`;
+                        input.placeholder = `a${i}${j}`;
+                        input.required = true;
+                        cell.appendChild(input);
+                        row.appendChild(cell);
+                    }
+                    table.appendChild(row);
+                }
+                container.appendChild(table);
+            }
+        }
+    </script>
+</body>
+</html>
